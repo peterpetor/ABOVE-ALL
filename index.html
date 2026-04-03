@@ -62,6 +62,13 @@ img { display: block; }
 /* ── NAV ── */
 .navbar { background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); position:sticky; top:0; z-index:1000; border-bottom:1px solid rgba(0,0,0,0.06); transition:box-shadow 0.3s; animation:slideDown 0.6s ease 0.1s both; }
 .navbar.scrolled { box-shadow:0 4px 30px rgba(0,0,0,0.08); }
+.navbar.menu-open { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--white); backdrop-filter:none; z-index:9999; border-bottom:none; animation:none; transform:none; }
+.navbar.menu-open .container { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto 1fr; height:100%; padding-top:14px; padding-bottom:14px; }
+.navbar.menu-open .logo { grid-column:1; grid-row:1; align-self:center; }
+.navbar.menu-open .hamburger { grid-column:2; grid-row:1; align-self:center; }
+.navbar.menu-open .nav-links.open { grid-column:1/-1; grid-row:2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; }
+.navbar.menu-open .nav-links.open a { font-size:22px; }
+.navbar.menu-open .nav-links.open .nav-cta { font-size:18px!important; padding:16px 40px; white-space:nowrap; }
 .navbar .container { display:flex; align-items:center; justify-content:space-between; padding-top:14px; padding-bottom:14px; }
 .logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
 .logo-icon { width:52px; height:52px; background:linear-gradient(135deg,var(--blue-primary),var(--blue-mid)); border-radius:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 15px rgba(13,59,122,0.3); transition:transform 0.3s; }
@@ -250,10 +257,12 @@ img { display: block; }
   .gallery-item:nth-child(1),.gallery-item:nth-child(4),.gallery-item:nth-child(7),.gallery-item:nth-child(8) { grid-column:span 1; } .gallery-item { height:240px; }
   .footer-grid { grid-template-columns:1fr 1fr; }
   .guarantee .container { grid-template-columns:1fr; text-align:center; justify-items:center; }
+  .nav-links { display:none; } .hamburger { display:block; }
+  .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+  .hamburger.active span:nth-child(2) { opacity:0; }
+  .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
 }
 @media (max-width:768px) {
-  .nav-links { display:none; } .hamburger { display:block; }
-  .nav-links.open { display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0; background:var(--white); padding:30px; gap:20px; box-shadow:0 20px 40px rgba(0,0,0,0.1); border-top:1px solid var(--gray-light); }
   .services-grid { grid-template-columns:1fr; } .testimonial-grid { grid-template-columns:1fr; }
   .hero-trust { flex-wrap:wrap; gap:24px; } .hero-btns { flex-direction:column; }
   .topbar .container { justify-content:center; text-align:center; }
@@ -261,7 +270,7 @@ img { display: block; }
   .gallery-grid { grid-template-columns:1fr; grid-template-rows:auto; }
   .gallery-item { height:220px; } .gallery-item:nth-child(1),.gallery-item:nth-child(4),.gallery-item:nth-child(7),.gallery-item:nth-child(8) { grid-column:span 1; }
   .footer-grid { grid-template-columns:1fr; } .footer-bottom { justify-content:center; text-align:center; }
-  .trust-bar .container { gap:30px; }
+  .trust-bar .container { flex-direction:column; gap:20px; align-items:flex-start; }
 }
 </style>
 </head>
@@ -274,7 +283,7 @@ img { display: block; }
 <nav class="navbar" id="navbar"><div class="container">
   <a href="#" class="logo"><div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4L4 20h6v14h20V20h6L20 4z" fill="white" opacity="0.9"/><path d="M20 4L4 20h6v14h8V26h4v8h8V20h6L20 4z" fill="white"/><path d="M16 26h8v8h-8z" fill="rgba(212,102,42,0.8)"/></svg></div><div class="logo-text"><span class="logo-name">Above All</span><span class="logo-sub">Roofing & Groundwork</span></div></a>
   <ul class="nav-links" id="navLinks"><li><a href="#services">Services</a></li><li><a href="#why-us">About</a></li><li><a href="#process">Process</a></li><li><a href="#testimonials">Reviews</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#cta" class="nav-cta">Free Quote</a></li></ul>
-  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('active');document.getElementById('navbar').classList.toggle('menu-open');document.body.style.overflow=document.getElementById('navLinks').classList.contains('open')?'hidden':''"><span></span><span></span><span></span></button>
 </div></nav>
 
 <!-- HERO -->
@@ -417,7 +426,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => observer.observe(el));
 window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
-document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if(t){t.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('navLinks').classList.remove('open');}}));
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if(t){t.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('navLinks').classList.remove('open');document.querySelector('.hamburger').classList.remove('active');document.getElementById('navbar').classList.remove('menu-open');document.body.style.overflow='';}}));
 </script>
 </body>
 </html>
