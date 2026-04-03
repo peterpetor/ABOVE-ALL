@@ -62,7 +62,7 @@ img { display: block; }
 /* ── NAV ── */
 .navbar { background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); position:sticky; top:0; z-index:1000; border-bottom:1px solid rgba(0,0,0,0.06); transition:box-shadow 0.3s; animation:slideDown 0.6s ease 0.1s both; }
 .navbar.scrolled { box-shadow:0 4px 30px rgba(0,0,0,0.08); }
-.navbar.menu-open { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--white); backdrop-filter:none; z-index:9999; border-bottom:none; animation:none; transform:none; }
+.navbar.menu-open { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--white); backdrop-filter:none; z-index:9999; border-bottom:none; animation:none; transform:none; overflow:hidden; }
 .navbar.menu-open .container { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto 1fr; height:100%; padding-top:14px; padding-bottom:14px; }
 .navbar.menu-open .logo { grid-column:1; grid-row:1; align-self:center; }
 .navbar.menu-open .hamburger { grid-column:2; grid-row:1; align-self:center; }
@@ -283,7 +283,7 @@ img { display: block; }
 <nav class="navbar" id="navbar"><div class="container">
   <a href="#" class="logo"><div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4L4 20h6v14h20V20h6L20 4z" fill="white" opacity="0.9"/><path d="M20 4L4 20h6v14h8V26h4v8h8V20h6L20 4z" fill="white"/><path d="M16 26h8v8h-8z" fill="rgba(212,102,42,0.8)"/></svg></div><div class="logo-text"><span class="logo-name">Above All</span><span class="logo-sub">Roofing & Groundwork</span></div></a>
   <ul class="nav-links" id="navLinks"><li><a href="#services">Services</a></li><li><a href="#why-us">About</a></li><li><a href="#process">Process</a></li><li><a href="#testimonials">Reviews</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#cta" class="nav-cta">Free Quote</a></li></ul>
-  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('active');document.getElementById('navbar').classList.toggle('menu-open');document.body.style.overflow=document.getElementById('navLinks').classList.contains('open')?'hidden':''"><span></span><span></span><span></span></button>
+  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('active');document.getElementById('navbar').classList.toggle('menu-open')"><span></span><span></span><span></span></button>
 </div></nav>
 
 <!-- HERO -->
@@ -426,7 +426,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => observer.observe(el));
 window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
-document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if(t){t.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('navLinks').classList.remove('open');document.querySelector('.hamburger').classList.remove('active');document.getElementById('navbar').classList.remove('menu-open');document.body.style.overflow='';}}));
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if(t){t.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('navLinks').classList.remove('open');document.querySelector('.hamburger').classList.remove('active');document.getElementById('navbar').classList.remove('menu-open');}}));
 </script>
 </body>
 </html>
